@@ -1,0 +1,252 @@
+/* --- CryptoTrack Professional CSS --- */
+
+/* 1. Global Styles & Variables */
+:root {
+  --background: #0f1218;
+  --panel: #161a22;
+  --text: #e6e8ee;
+  --muted: #9aa3b2;
+  --accent: #4f8cff;
+  --border: #242a36;
+  --pos: #19c37d; /* Positive change color */
+  --neg: #ff5d5d; /* Negative change color */
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: 'Poppins', sans-serif;
+  background: var(--background);
+  color: var(--text);
+}
+
+.container {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 2rem 1rem;
+}
+
+.mt {
+  margin-top: 1.5rem;
+}
+
+/* 2. Layouts */
+.grid2 { 
+  display: grid; 
+  grid-template-columns: 1.2fr 0.8fr; 
+  gap: 1.5rem; 
+}
+.flex-between { 
+  display: flex; 
+  justify-content: space-between; 
+  align-items: center; 
+  margin-bottom: 1.5rem; 
+}
+
+/* 3. Navbar & Buttons */
+.public-nav {
+  padding: 1rem 2rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid var(--border);
+  background: var(--background);
+}
+.brand {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--text);
+  text-decoration: none;
+}
+.nav-links a {
+  color: var(--muted);
+  text-decoration: none;
+  margin-left: 1.5rem;
+  transition: color 0.2s ease;
+}
+.nav-links a:hover {
+  color: var(--text);
+}
+.btn {
+  background: var(--accent);
+  color: white;
+  padding: 0.6rem 1.2rem;
+  border-radius: 8px;
+  text-decoration: none;
+  font-weight: 600;
+  border: none;
+  cursor: pointer;
+  transition: filter 0.2s ease;
+}
+.btn:hover {
+  filter: brightness(1.1);
+}
+.btn.ghost {
+  background: transparent;
+  border: 1px solid var(--border);
+}
+
+/* 4. Auth & Dashboard Shared Styles */
+.page-title {
+  font-size: 2rem;
+  font-weight: 700;
+}
+.card {
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 1.5rem;
+}
+.card-header {
+  font-size: 1.2rem;
+  font-weight: 600;
+  margin-bottom: 1rem;
+}
+.pos { color: var(--pos); }
+.neg { color: var(--neg); }
+.loading-text, .error-message {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  color: var(--muted);
+}
+.error-message { color: var(--neg); }
+
+/* 5. Summary KPI Cards */
+.kpi-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.5rem;
+  margin-bottom: 1.5rem;
+}
+.kpi-card {
+  background: var(--panel);
+  padding: 1.5rem;
+  border-radius: 12px;
+  border: 1px solid var(--border);
+}
+.kpi-title {
+  color: var(--muted);
+  font-size: 0.9rem;
+  margin-bottom: 0.5rem;
+}
+.kpi-value {
+  font-size: 1.8rem;
+  font-weight: 600;
+}
+
+/* 6. Table Styles */
+.table-wrap { overflow-x: auto; }
+.tbl {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+}
+.tbl th, .tbl td {
+  padding: 0.8rem 1rem;
+  border-bottom: 1px solid var(--border);
+  white-space: nowrap;
+}
+.tbl th {
+  color: var(--muted);
+  font-size: 0.8rem;
+  text-transform: uppercase;
+}
+.coin-name {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+.coin-name img {
+  width: 28px;
+  height: 28px;
+}
+.coin-title { font-weight: 600; }
+.coin-sub {
+  font-size: 0.8rem;
+  color: var(--muted);
+}
+
+/* 7. Form Styles */
+.form-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1rem;
+}
+.form-grid .full-width { grid-column: 1 / -1; }
+.form-grid label {
+  font-size: 0.8rem;
+  color: var(--muted);
+  display: block;
+  margin-bottom: 0.25rem;
+}
+.form-grid input {
+  width: 100%;
+  background: var(--background);
+  border: 1px solid var(--border);
+  color: var(--text);
+  padding: 0.7rem 1rem;
+  border-radius: 8px;
+  font-size: 0.9rem;
+}
+
+/* 8. Mobile Responsiveness */
+@media (max-width: 768px) {
+  .container { padding: 1rem; }
+  .grid2, .kpi-grid, .form-grid { grid-template-columns: 1fr; }
+  .flex-between {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+  }
+}
+.dashboard-card {
+  background-color: #1e293b;
+  border-radius: 8px;
+  padding: 1.5rem;
+  margin-bottom: 2rem;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+}
+
+.card-header {
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin-bottom: 1rem;
+  color: #f8fafc;
+}
+
+.portfolio-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.form-input {
+  padding: 0.75rem;
+  border-radius: 6px;
+  border: 1px solid #334155;
+  background-color: #0f172a;
+  color: #e2e8f0;
+  font-size: 1rem;
+}
+
+.add-holding-btn {
+  background-color: #3b82f6;
+  color: white;
+  padding: 0.75rem 1.5rem;
+  border-radius: 6px;
+  border: none;
+  font-weight: 600;
+  cursor: pointer;
+  margin-top: 1rem;
+  transition: background-color 0.2s;
+}
+
+.add-holding-btn:hover {
+  background-color: #2563eb;
+}
