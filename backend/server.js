@@ -12,7 +12,14 @@ const cryptoRoutes = require('./routes/cryptoRoutes');
 const exportRoutes = require('./routes/exportRoutes');
 
 const app = express();
-app.use(cors());
+
+// ✅ CORS fixed for frontend deployment
+app.use(cors({
+  origin: "https://cryptotrack-frontend.onrender.com",
+  methods: ["GET", "POST", "PUT", "DELETE"],
+  credentials: true
+}));
+
 app.use(express.json());
 
 // Routes
