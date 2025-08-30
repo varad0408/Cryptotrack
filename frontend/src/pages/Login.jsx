@@ -1,49 +1,37 @@
 // src/pages/Login.jsx
 import React, { useState } from "react";
 import api from "../services/api";
+import { useNavigate } from "react-router-dom";
 
 const Login = () => {
-  const [formData, setFormData] = useState({
-    email: "",
-    password: "",
-  });
-
-  const [message, setMessage] = useState("");
+  const [form, setForm] = useState({ email: "", password: "" });
+  const navigate = useNavigate();
 
   const handleChange = (e) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value,
-    });
+    setForm({ ...form, [e.target.name]: e.target.value });
   };
 
   const handleSubmit = async (e) => {
-    e.preventDefault(); // ✅ stops browser reload
-
+    e.preventDefault();
     try {
-      const res = await api.post("/auth/login", formData);
-
-      // ✅ Save token for authenticated requests
-      if (res.data.token) {
-        localStorage.setItem("token", res.data.token);
-        setMessage("Login successful!");
-      } else {
-        setMessage("Login successful, but no token received.");
-      }
+      const res = await api.post("/auth/login", form);
+      localStorage.setItem("token", res.data.token);
+      alert("✅ Login successful!");
+      navigate("/dashboard");
     } catch (err) {
-      setMessage(err.response?.data?.error || "Login failed.");
+      alert("❌ Login failed: " + (err.response?.data?.message || err.message));
     }
   };
 
   return (
-    <div className="login-container">
+    <div className="form-container">
       <h2>Login</h2>
       <form onSubmit={handleSubmit}>
         <input
           type="email"
           name="email"
           placeholder="Email"
-          value={formData.email}
+          value={form.email}
           onChange={handleChange}
           required
         />
@@ -51,13 +39,12 @@ const Login = () => {
           type="password"
           name="password"
           placeholder="Password"
-          value={formData.password}
+          value={form.password}
           onChange={handleChange}
           required
         />
         <button type="submit">Login</button>
       </form>
-      {message && <p>{message}</p>}
     </div>
   );
 };

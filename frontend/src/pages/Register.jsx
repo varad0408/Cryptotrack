@@ -1,43 +1,36 @@
 // src/pages/Register.jsx
 import React, { useState } from "react";
 import api from "../services/api";
+import { useNavigate } from "react-router-dom";
 
 const Register = () => {
-  const [formData, setFormData] = useState({
-    name: "",
-    email: "",
-    password: "",
-  });
-
-  const [message, setMessage] = useState("");
+  const [form, setForm] = useState({ username: "", email: "", password: "" });
+  const navigate = useNavigate();
 
   const handleChange = (e) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value,
-    });
+    setForm({ ...form, [e.target.name]: e.target.value });
   };
 
   const handleSubmit = async (e) => {
-    e.preventDefault(); // ✅ stops page reload
-
+    e.preventDefault();
     try {
-      const res = await api.post("/auth/register", formData);
-      setMessage(res.data.message || "Registration successful!");
+      await api.post("/auth/register", form);
+      alert("✅ Registration successful! Please login.");
+      navigate("/login");
     } catch (err) {
-      setMessage(err.response?.data?.error || "Registration failed.");
+      alert("❌ Registration failed: " + (err.response?.data?.message || err.message));
     }
   };
 
   return (
-    <div className="register-container">
+    <div className="form-container">
       <h2>Register</h2>
       <form onSubmit={handleSubmit}>
         <input
           type="text"
-          name="name"
-          placeholder="Name"
-          value={formData.name}
+          name="username"
+          placeholder="Username"
+          value={form.username}
           onChange={handleChange}
           required
         />
@@ -45,7 +38,7 @@ const Register = () => {
           type="email"
           name="email"
           placeholder="Email"
-          value={formData.email}
+          value={form.email}
           onChange={handleChange}
           required
         />
@@ -53,13 +46,12 @@ const Register = () => {
           type="password"
           name="password"
           placeholder="Password"
-          value={formData.password}
+          value={form.password}
           onChange={handleChange}
           required
         />
         <button type="submit">Register</button>
       </form>
-      {message && <p>{message}</p>}
     </div>
   );
 };
