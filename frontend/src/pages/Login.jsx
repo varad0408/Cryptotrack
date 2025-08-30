@@ -1,37 +1,63 @@
+// src/pages/Login.jsx
 import React, { useState } from "react";
-import { useNavigate, Link } from "react-router-dom";
 import api from "../services/api";
 
 const Login = () => {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const navigate = useNavigate();
+  const [formData, setFormData] = useState({
+    email: "",
+    password: "",
+  });
+
+  const [message, setMessage] = useState("");
+
+  const handleChange = (e) => {
+    setFormData({
+      ...formData,
+      [e.target.name]: e.target.value,
+    });
+  };
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
+    e.preventDefault(); // ✅ stops browser reload
+
     try {
-      const res = await api.post("/api/auth/login", { email, password }); // ✅ fixed path
-      localStorage.setItem("token", res.data.token);
-      navigate("/dashboard");
+      const res = await api.post("/auth/login", formData);
+
+      // ✅ Save token for authenticated requests
+      if (res.data.token) {
+        localStorage.setItem("token", res.data.token);
+        setMessage("Login successful!");
+      } else {
+        setMessage("Login successful, but no token received.");
+      }
     } catch (err) {
-      alert("Login failed. Please check your credentials.");
+      setMessage(err.response?.data?.error || "Login failed.");
     }
   };
 
   return (
-    <div className="container">
-       <div className="card" style={{maxWidth: '400px', margin: '3rem auto'}}>
-        <h3 style={{textAlign: 'center', fontSize: '1.8rem', marginBottom: '1.5rem'}}>Log In</h3>
-        <form onSubmit={handleSubmit}>
-          <input type="email" placeholder="Email Address" value={email} onChange={(e) => setEmail(e.target.value)} required style={{width: '100%', marginBottom: '1rem', background: 'var(--background)', border: '1px solid var(--border)', color: 'var(--text)', padding: '0.8rem 1rem', borderRadius: '8px'}} />
-          <input type="password" placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)} required style={{width: '100%', marginBottom: '1rem', background: 'var(--background)', border: '1px solid var(--border)', color: 'var(--text)', padding: '0.8rem 1rem', borderRadius: '8px'}} />
-          <button type="submit" className="btn" style={{ width: '100%', marginTop: '1rem' }}>Login</button>
-        </form>
-        <p style={{textAlign: 'center', marginTop: '1.5rem'}}>
-          Don't have an account?{" "}
-          <Link to="/register" style={{color: 'var(--accent)'}}>Register here</Link>
-        </p>
-      </div>
+    <div className="login-container">
+      <h2>Login</h2>
+      <form onSubmit={handleSubmit}>
+        <input
+          type="email"
+          name="email"
+          placeholder="Email"
+          value={formData.email}
+          onChange={handleChange}
+          required
+        />
+        <input
+          type="password"
+          name="password"
+          placeholder="Password"
+          value={formData.password}
+          onChange={handleChange}
+          required
+        />
+        <button type="submit">Login</button>
+      </form>
+      {message && <p>{message}</p>}
     </div>
   );
 };

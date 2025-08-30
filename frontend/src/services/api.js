@@ -1,9 +1,7 @@
-// src/services/api.js
 import axios from "axios";
 
 const api = axios.create({
-  // Add `/api` so all routes are prefixed correctly
-  baseURL: (process.env.REACT_APP_API_URL || "http://localhost:5000") + "/api",
+  baseURL: process.env.REACT_APP_API_URL + "/api", // ✅ Always points to backend
 });
 
 api.interceptors.request.use((config) => {

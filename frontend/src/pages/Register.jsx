@@ -1,40 +1,65 @@
+// src/pages/Register.jsx
 import React, { useState } from "react";
-import { useNavigate, Link } from "react-router-dom";
 import api from "../services/api";
 
 const Register = () => {
-  const [username, setUsername] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const navigate = useNavigate();
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    password: "",
+  });
+
+  const [message, setMessage] = useState("");
+
+  const handleChange = (e) => {
+    setFormData({
+      ...formData,
+      [e.target.name]: e.target.value,
+    });
+  };
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
+    e.preventDefault(); // ✅ stops page reload
+
     try {
-      // ✅ Only this line changed — added /api/
-      const res = await api.post("/api/auth/register", { username, email, password });
-      localStorage.setItem("token", res.data.token);
-      navigate("/dashboard");
+      const res = await api.post("/auth/register", formData);
+      setMessage(res.data.message || "Registration successful!");
     } catch (err) {
-      alert("Registration failed. A user with this email may already exist.");
+      setMessage(err.response?.data?.error || "Registration failed.");
     }
   };
 
   return (
-    <div className="container">
-      <div className="card" style={{maxWidth: '400px', margin: '3rem auto'}}>
-        <h3 style={{textAlign: 'center', fontSize: '1.8rem', marginBottom: '1.5rem'}}>Create Account</h3>
-        <form onSubmit={handleSubmit}>
-            <input type="text" placeholder="Username" value={username} onChange={(e) => setUsername(e.target.value)} required style={{width: '100%', marginBottom: '1rem', background: 'var(--background)', border: '1px solid var(--border)', color: 'var(--text)', padding: '0.8rem 1rem', borderRadius: '8px'}} />
-            <input type="email" placeholder="Email Address" value={email} onChange={(e) => setEmail(e.target.value)} required style={{width: '100%', marginBottom: '1rem', background: 'var(--background)', border: '1px solid var(--border)', color: 'var(--text)', padding: '0.8rem 1rem', borderRadius: '8px'}} />
-            <input type="password" placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)} required style={{width: '100%', marginBottom: '1rem', background: 'var(--background)', border: '1px solid var(--border)', color: 'var(--text)', padding: '0.8rem 1rem', borderRadius: '8px'}} />
-            <button type="submit" className="btn" style={{ width: '100%', marginTop: '1rem' }}>Create Account</button>
-        </form>
-        <p style={{textAlign: 'center', marginTop: '1.5rem'}}>
-          Already have an account?{" "}
-          <Link to="/login" style={{color: 'var(--accent)'}}>Log in here</Link>
-        </p>
-      </div>
+    <div className="register-container">
+      <h2>Register</h2>
+      <form onSubmit={handleSubmit}>
+        <input
+          type="text"
+          name="name"
+          placeholder="Name"
+          value={formData.name}
+          onChange={handleChange}
+          required
+        />
+        <input
+          type="email"
+          name="email"
+          placeholder="Email"
+          value={formData.email}
+          onChange={handleChange}
+          required
+        />
+        <input
+          type="password"
+          name="password"
+          placeholder="Password"
+          value={formData.password}
+          onChange={handleChange}
+          required
+        />
+        <button type="submit">Register</button>
+      </form>
+      {message && <p>{message}</p>}
     </div>
   );
 };
